@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Map extends JFrame {
+    final boolean WIPEEFFECT = false;
+    final int ITERATIONS = 9;
     final int HEIGHT = 600;
     final int WIDTH = HEIGHT; //keeping it a square for now
-    final int mappointsize = 10; //width and height of each block
     Long seed;
     BufferedImage mapimage;
     public Map(String seed){
@@ -53,7 +54,7 @@ public class Map extends JFrame {
             }
         }
         //endregion
-        for(int z = 0; z<5;z++){
+        for(int z = 0; z<ITERATIONS;z++){
 
 
             //region not random
@@ -71,9 +72,9 @@ public class Map extends JFrame {
                         for(int j = y-1;j<=y+1;j++){
 
                             try{
-                                if(i!=x && j!=y){//don't look at middle pixel. that is the one we're changing.
+                                //if(i!=x && j!=y){//don't look at middle pixel. that is the one we're changing.
                                     surroundingHeights.add(array[i][j].getHeight());
-                                }
+                               // }
                             }catch(Exception e){
                                 //when the point is on the edge, there will be an out of bounds exception. we can ignore it when that happens.
                             }
@@ -97,9 +98,11 @@ public class Map extends JFrame {
             }
         }
         repaint();
-        try{
-            Thread.sleep(1);
-        }catch(Exception e){
+        if(WIPEEFFECT){
+            try{
+                Thread.sleep(1);
+            }catch(Exception e){
+            }
         }
     }
     public void paint(Graphics g) {

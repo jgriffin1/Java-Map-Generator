@@ -56,33 +56,23 @@ public class MapPoint {
             case(-7):
             case(-6):
             case(-5):
-            case(-4):
-                return new Color(17, 83, 189); //dark blue water
+            case(-4):return new Color(17, 83, 189); //dark blue water
             case(-3):
-            case(-2):
-                return new Color(105, 143, 184); //lighter blue
-
+            case(-2):return new Color(105, 143, 184); //lighter blue
             case(-1):
-                return new Color(233, 196, 140); //tan-ish
-
-            case(0):
-            case(1):
-                return new Color(22, 92, 8); //darkish green
-            case(2):
-            case(3):
-                return new Color(103, 161, 92); //less healthy green
-            case(4):
-            case(5):
-            case(6):
-                return new Color(169, 181, 168); //green-grey
+            case(0):return new Color(233, 196, 140); //tan-ish
+            case(1):return new Color(190, 200, 100); //tan-ish
+            case(2):return new Color(0, 80, 0); //darkish green
+            case(3):return new Color(22, 92, 8); //darkish green
+            case(4):return new Color(103, 161, 92); //less healthy green
+            case(5):return new Color(130, 170, 130); //less healthy green
+            case(6):return new Color(169, 181, 168); //green-grey
             case(7):
-            case(8):
-            case(9):
-                return new Color(63, 69, 62); //gray mountain
-            case(10):
-                return new Color(204, 204, 204); //white snow
-            default:
-                return new Color(0,0,0);//just black.. idk This isn't suppsoed to be a collor that happens at this point
+            case(8):return new Color(139, 151, 138); //green-grey
+            case(9):return new Color(100, 100, 100); //gray mountain
+
+            case(10):return new Color(204, 204, 204); //white snow
+            default: return new Color(0,0,0);//just black.. idk This isn't suppsoed to be a collor that happens at this point
         }
     }
 
