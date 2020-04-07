@@ -4,14 +4,6 @@ import java.util.ArrayList;
 public class MapPoint {
     private int height; //from -10 to 10
     int x, y;
-    /*
-    my current idea is that the height will determine the color etc.
-    Perhaps it generates in such a way that higher heights = whiter (snow) middleish = green "grass" lower = dark green/brown/water (idk... this is just a theory)
-    From point to point, it can vary either 1-3 or something. Maybe if there's a few decreasing in a row, it'll be more likely to remain that way... we'll see what happens. `\_(^_^)_/`
-     */
-    public MapPoint(){
-
-    }
     public MapPoint(int height, int x, int y){
         this.height = height;
         this.x = x;
@@ -23,8 +15,8 @@ public class MapPoint {
     public void setHeight(int height){
         this.height = height;
     }
-    public void setHeight(ArrayList<Integer> SurroundingHeights, int AmountToMoveBy){
-        //take the average of surrounding nubmers and add/subtract 1 or 0
+    public void setHeight(ArrayList<Integer> SurroundingHeights){
+        //take the average of surrounding numbers and add/subtract 1 if average is pos/neg. (Make high points higher, low points lower)
         float average = 0;
         int counter = 0;
         for(int x : SurroundingHeights){
@@ -37,7 +29,6 @@ public class MapPoint {
         }else if (average>0){
             height = (int)(average + 1);
         }
-        //height = (int)(average) + AmountToMoveBy;
 
         //can't be higher than 10 or less than -10
         if(height>10) {
@@ -60,9 +51,9 @@ public class MapPoint {
             case(-3):
             case(-2):return new Color(105, 143, 184); //lighter blue
             case(-1):
-            case(0):return new Color(233, 196, 140); //tan-ish
-            case(1):return new Color(190, 200, 100); //tan-ish
-            case(2):return new Color(0, 80, 0); //darkish green
+            case(0):
+            case(1):return new Color(233, 196, 140); //tan-ish
+            case(2):return new Color(20, 100, 20); //darkish green
             case(3):return new Color(22, 92, 8); //darkish green
             case(4):return new Color(103, 161, 92); //less healthy green
             case(5):return new Color(130, 170, 130); //less healthy green

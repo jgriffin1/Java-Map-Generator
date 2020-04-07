@@ -9,11 +9,12 @@ import java.util.Random;
 
 public class Map extends JFrame {
     final boolean WIPEEFFECT = false;
-    final int ITERATIONS = 9;
+    final int ITERATIONS = 6;
     final int HEIGHT = 600;
     final int WIDTH = HEIGHT; //keeping it a square for now
     Long seed;
     BufferedImage mapimage;
+
     public Map(String seed){
         this.seed = stringToSeed(seed);
         setTitle("Map");
@@ -40,12 +41,6 @@ public class Map extends JFrame {
         //region make everything random
         for(int x = 0; x<array.length;x++){
             for(int y=0;y<array[0].length;y++){
-                //try to get surrounding heights. increase/decrease by one.
-//                boolean StillNullMapPoints = true;
-//                while(StillNullMapPoints){
-//
-//                }
-                //for test, just set to random numbers:
                 int low = -10;
                 int high = 10;
                 array[x][y]=new MapPoint(low + random.nextInt(high-low+1),x,y);
@@ -61,7 +56,7 @@ public class Map extends JFrame {
             ArrayList surroundingHeights = new ArrayList();
             for(int x = 0; x<array.length;x++){
                 for(int y=0;y<array[0].length;y++){
-                    //try to get surrounding heights. increase/decrease by one.
+                    //get surrounding heights to increase/decrease by one.
                     //
                     //say it looks like this:   5 10 3
                     //                          3 x  5
@@ -72,9 +67,7 @@ public class Map extends JFrame {
                         for(int j = y-1;j<=y+1;j++){
 
                             try{
-                                //if(i!=x && j!=y){//don't look at middle pixel. that is the one we're changing.
                                     surroundingHeights.add(array[i][j].getHeight());
-                               // }
                             }catch(Exception e){
                                 //when the point is on the edge, there will be an out of bounds exception. we can ignore it when that happens.
                             }
@@ -82,8 +75,7 @@ public class Map extends JFrame {
                     }
                     int low = -1;
                     int high = 1;
-                    array[x][y].setHeight(surroundingHeights,low + random.nextInt(high-low+1));
-                    //surroundingHeights.clear();
+                    array[x][y].setHeight(surroundingHeights);
                     AddMapPixel(array[x][y]);
                 }
             }
