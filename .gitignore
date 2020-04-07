@@ -1,12 +1,11 @@
+# my custom stuff
+Maps/
+
 # Eclipse
 .classpath
 .project
 .settings/
 
-# Created by https://www.gitignore.io/api/eclipse
-# Edit at https://www.gitignore.io/?templates=eclipse
-
-### Eclipse ###
 .metadata
 bin/
 tmp/

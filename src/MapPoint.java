@@ -1,24 +1,50 @@
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MapPoint {
     private int height; //from -10 to 10
+    int x, y;
     /*
     my current idea is that the height will determine the color etc.
     Perhaps it generates in such a way that higher heights = whiter (snow) middleish = green "grass" lower = dark green/brown/water (idk... this is just a theory)
-    From point to point, it can vary either 1-3 or something. Maybe if there's a trend, it'll remain that way... we'll see what happens. `\_(^_^)_/`
+    From point to point, it can vary either 1-3 or something. Maybe if there's a few decreasing in a row, it'll be more likely to remain that way... we'll see what happens. `\_(^_^)_/`
      */
     public MapPoint(){
 
     }
-    public MapPoint(int height){
+    public MapPoint(int height, int x, int y){
         this.height = height;
+        this.x = x;
+        this.y = y;
     }
     public int getHeight(){
         return height;
     }
+    public void setHeight(int height){
+        this.height = height;
+    }
+    public void setHeight(ArrayList<Integer> SurroundingHeights, int AmountToMoveBy){
+        //take the average of surrounding nubmers and add/subtract 1 or 0
+        float average = 0;
+        int counter = 0;
+        for(int x : SurroundingHeights){
+            average+=x;
+            counter+=1;
+        }
+        average=average/counter;
+        height = (int)(average) + AmountToMoveBy;
+
+        //can't be higher than 10 or less than -10
+        if(height>10) {
+            height = 10;
+        }else if(height<-10){
+            height = -10;
+        }
+
+    }
     public Color getColor(){
         switch(height){
-            //-10 to -3 = darkblue
+            //in the future, we could probably change this so that water level is higher/lower
             case(-10):
             case(-9):
             case(-8):
