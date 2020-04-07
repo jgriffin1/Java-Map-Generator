@@ -32,7 +32,12 @@ public class MapPoint {
             counter+=1;
         }
         average=average/counter;
-        height = (int)(average) + AmountToMoveBy;
+        if(average<0){
+            height= (int) (average - 1);
+        }else if (average>0){
+            height = (int)(average + 1);
+        }
+        //height = (int)(average) + AmountToMoveBy;
 
         //can't be higher than 10 or less than -10
         if(height>10) {
