@@ -14,7 +14,8 @@ public class Map extends JFrame {
     final int WIDTH = HEIGHT; //keeping it a square for now
     Long seed;
     BufferedImage mapimage;
-
+    MapPoint array[][];
+    Random random;
     public Map(String seed){
         this.seed = stringToSeed(seed);
         setTitle("Map");
@@ -23,7 +24,7 @@ public class Map extends JFrame {
         setResizable(false);
         setVisible(true);
         BuildMap();
-
+        AddIcons();
         //save the most recently created map to a file
         try {
             ImageIO.write(mapimage, "png", new File("Maps/MapWithSeed-"+seed+".png"));
@@ -35,15 +36,15 @@ public class Map extends JFrame {
     private void BuildMap(){
         mapimage = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 
-        Random random = new Random(seed);
-        MapPoint array[][] = new MapPoint[60][60];
+        random = new Random(seed);
+         array = new MapPoint[60][60];
 
         //region make everything random
         for(int x = 0; x<array.length;x++){
             for(int y=0;y<array[0].length;y++){
                 int low = -10;
                 int high = 10;
-                array[x][y]=new MapPoint(low + random.nextInt(high-low+1),x,y);
+                array[x][y]=new MapPoint(low + random.nextInt(high-low+1),x,y,random);
                 AddMapPixel(array[x][y]);
 
             }
@@ -73,22 +74,61 @@ public class Map extends JFrame {
                             }
                         }
                     }
-                    int low = -1;
-                    int high = 1;
                     array[x][y].setHeight(surroundingHeights);
                     AddMapPixel(array[x][y]);
                 }
             }
             //endregion
+
+
         }
     }
+    private void AddIcons(){
+        try{
+//
+            BufferedImage source = mapimage;
+            Graphics g = source.getGraphics();
+            for(int x = 0; x<array.length;x+=1){
+                for(int y=0;y<array[0].length;y+=1) {
+                    try{
+                        int low = 0;
+                        int high = 100;
+                        int randomNumber = low + random.nextInt(high-low+1);
+                        if((array[x][y].getIcon() != null)&&(randomNumber>70)){
+                            int low2=-4;
+                            int high2=4;
+                            int randomNumber2 = low2 + random.nextInt(high2-low2+1);
+                            g.drawImage((BufferedImage)ImageIO.read(new File(array[x][y].getIcon())), x*10+5+randomNumber2, y*10-20+randomNumber2, null);
 
+                        }
+
+                    }catch(Exception ex){
+
+                    }
+                }
+            }
+            IconGrabber i = new  IconGrabber();
+            BufferedImage SirLuka = ImageIO.read(new File("Icons/SirLuka.png"));
+            BufferedImage Compass = ImageIO.read(new File("Icons/compass.png"));
+            Compass=resize(Compass,75,75);
+            BufferedImage name = ImageIO.read(new File("Icons/mapname.png"));
+            name=resize(name,50,200);
+            g.drawImage(SirLuka,10,490,null);
+            g.drawImage(Compass,20,50,null);
+            g.drawImage(name,85,560,null);
+
+            repaint();
+        }catch(Exception e){
+
+        }
+    }
     private void AddMapPixel(MapPoint mp){
         for(int x1 = mp.x*10; x1<((mp.x*10)+10);x1++){
             for(int y1=mp.y*10;y1<((mp.y*10)+10);y1++){
                 mapimage.setRGB(x1,y1,mp.getColor().getRGB());
             }
         }
+
         repaint();
         if(WIPEEFFECT){
             try{
@@ -96,6 +136,14 @@ public class Map extends JFrame {
             }catch(Exception e){
             }
         }
+    }
+    private static BufferedImage resize(BufferedImage img, int height, int width) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
     }
     public void paint(Graphics g) {
         g.drawImage(mapimage, 0, 0, this);
@@ -110,4 +158,5 @@ public class Map extends JFrame {
         }
         return hash;
     }
+
 }

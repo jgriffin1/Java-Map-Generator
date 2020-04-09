@@ -1,13 +1,17 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MapPoint {
     private int height; //from -10 to 10
     int x, y;
-    public MapPoint(int height, int x, int y){
+    Random random;
+    public MapPoint(int height, int x, int y,Random r){
         this.height = height;
         this.x = x;
         this.y = y;
+        this.random = r;
     }
     public int getHeight(){
         return height;
@@ -67,5 +71,36 @@ public class MapPoint {
         }
     }
 
+    public String getIcon(){
+        //BufferedImage test = IconGrabber.get(IconGrabber.icon.AppleTree);
+        IconGrabber i = new IconGrabber(random);
+        switch(height){
+            //in the future, we could probably change this so that water level is higher/lower
+
+            case(-10):
+            case(-9):
+            case(-8):return i.get(IconGrabber.icon.WHALE);
+            case(-7):
+            case(-6):
+            case(-5):
+            case(-4)://return new Color(17, 83, 189);
+            case(-3):
+            case(-2)://return new Color(105, 143, 184);
+            case(-1):
+            case(0):return i.get(IconGrabber.icon.None);
+            case(1):return i.get(IconGrabber.icon.Palmtree);
+            case(2):return i.get(IconGrabber.icon.Plaintree);
+            case(3)://return i.get(IconGrabber.icon.Pinetree);
+            case(4):return i.get(IconGrabber.icon.Pinetree);
+            case(5):
+            case(6):
+            case(7):
+            case(8):return i.get(IconGrabber.icon.None);
+            case(9):return i.get(IconGrabber.icon.Mountain);
+
+            case(10)://return new Color(204, 204, 204);
+            default: return i.get(IconGrabber.icon.None);//return new Color(0,0,0);//just black.. idk This isn't suppsoed to be a collor that happens at this point
+        }
+    }
 
 }
