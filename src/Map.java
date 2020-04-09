@@ -51,7 +51,6 @@ public class Map extends JFrame {
         //endregion
         for(int z = 0; z<ITERATIONS;z++){
 
-
             //region not random
             ArrayList surroundingHeights = new ArrayList();
             for(int x = 0; x<array.length;x++){
@@ -73,8 +72,6 @@ public class Map extends JFrame {
                             }
                         }
                     }
-                    int low = -1;
-                    int high = 1;
                     array[x][y].setHeight(surroundingHeights);
                     AddMapPixel(array[x][y]);
                 }
