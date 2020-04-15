@@ -1,12 +1,10 @@
 # Map-Project
-CIS CLass
+CIS 357 Final Project
 
+This is a Random Map Generator programmed by Josh, Kyler, Matt, Brett, Dan.
 
-Here will be the locaiton of our Random Map Generator Program. 
+Every map is random, all art is original.
 
-Hi. Here I am testing to see if/how merging this into the repository works. -Josh
+All hail Sir Luka!
 
-Testing one more time using a program called GitKraken. This is my favorite program for using with Git. It makes it very easy to visualize branches and commits and pull/push changes.
-
-
-TESTING FOR DEMONSTRATION
+If anyone out on the internet finds this, feel free to use this to your heart's content (especially for educational purposes.)
