@@ -161,9 +161,9 @@ public class Map extends JPanel {
             Compass=resize(Compass,75,75);
             BufferedImage name = ImageIO.read(new File("Icons/mapname.png"));
             name=resize(name,20,180);
-            g.drawImage(SirLuka,10,490,null);
+            g.drawImage(SirLuka,10,getMAPHEIGHT()-110,null);
             g.drawImage(Compass,20,50,null);
-            g.drawImage(name,60,565,null);
+            g.drawImage(name,60,getMAPHEIGHT()-35,null);
 
         }catch(Exception e){
 
@@ -232,6 +232,11 @@ public class Map extends JPanel {
         }catch(Exception e){
             n=600;
         }
+        if(n<400){
+            n=400;
+        }else if(n>2000){
+            n=2000;
+        }
         this.MAPHEIGHT= n;
         this.PIXELSHIGH=n/10;
         //DoAllTheThings();
@@ -247,6 +252,12 @@ public class Map extends JPanel {
         }catch(Exception e){
             n=800;
         }
+        if(n<400){
+            n=400;
+        }else if(n>2000){
+            n=2000;
+        }
+
         this.MAPWIDTH = n;
         this.PIXELSWIDE=n/10;
         //DoAllTheThings();

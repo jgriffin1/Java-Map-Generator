@@ -34,7 +34,7 @@ public class MainFrame extends  JFrame implements ActionListener {
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //setResizable(false);
-        map = new  Map(800,2300);
+        map = new  Map(800,800);
         add(map,BorderLayout.WEST);
         //setSize(800,625);
 
