@@ -10,22 +10,24 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Map extends JPanel {
-    boolean WIPEEFFECT;
-    int ITERATIONS;
-    float ICONPERCENT;
-    Long seed;
-    BufferedImage mapimage;
-    MapPoint array[][];
-    Random random;
-    ArrayList allInARow;
-
-    int MAPHEIGHT,MAPWIDTH;
-    int PIXELSHIGH,PIXELSWIDE;
+    private boolean WIPEEFFECT;
+    private int ITERATIONS;
+    private float ICONPERCENT;
+    private Long seed;
+    private BufferedImage mapimage;
+    private MapPoint array[][];
+    private Random random;
+    private ArrayList allInARow;
+    private int MAPHEIGHT,MAPWIDTH;
+    private int PIXELSHIGH,PIXELSWIDE;
+    private int timercounter;
+    Timer timer;
     //JFrame mainFrame;
     //private
+
     public Map(int h, int w){
         //this(String.valueOf(System.currentTimeMillis()),8,false, Toolkit.getDefaultToolkit().getScreenSize().height-100, Toolkit.getDefaultToolkit().getScreenSize().width-100,50);
-        this(String.valueOf(System.currentTimeMillis()),8,false, h, w,50);
+        this(String.valueOf(System.currentTimeMillis()),8,true, h, w,50);
     }
     public Map(String seed, int ITERATIONS,boolean WIPEEFFECT, int HEIGHT, int WIDTH, float ICONPERCENT){
         this.seed = stringToSeed(seed);
@@ -36,40 +38,34 @@ public class Map extends JPanel {
         this.PIXELSHIGH=HEIGHT/10;
         this.PIXELSWIDE=WIDTH/10;
         this.ICONPERCENT = fixIconPercent(ICONPERCENT);
+        timer = new Timer(10,null);
+        timer.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                for(int i =0;i<PIXELSHIGH;i++){
+                    if(timercounter>=allInARow.size()){
+                        AddIcons();
+                        timer.stop();
+                        return;
+                    }
+                    AddMapPixel((MapPoint)allInARow.get(timercounter));
+                    timercounter+=1;
+                }
 
+            }
+        });
         setPreferredSize(new Dimension(WIDTH,HEIGHT));
         setLayout(new BorderLayout());
         DoAllTheThings();
 
 
     }
-    public static float fixIconPercent(float f){
-        if(f<0){ return 0;
-        }else if (f>100) return 100;
-        else return f;
-    }
-    int test1 = 0;
+
     public void DoAllTheThings(){
+        timercounter= 0;
         BuildMap();
         if(WIPEEFFECT){
-            Timer timer = new Timer(10,null);
-            timer.addActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent e) {
-                    for(int i =0;i<PIXELSHIGH;i++){
-                        if(test1>=allInARow.size()){
-                            AddIcons();
-                            timer.stop();
-                            return;
-                        }
-                        AddMapPixel((MapPoint)allInARow.get(test1));
-                        test1+=1;
-                    }
-
-                }
-            });
             timer.start();
         }else{
-
             for(int i =allInARow.size()-PIXELSHIGH*PIXELSWIDE;i<allInARow.size();i++){
                 AddMapPixel((MapPoint)allInARow.get(i));
             }
@@ -84,7 +80,6 @@ public class Map extends JPanel {
 
         }
     }
-
     private void BuildMap(){
         allInARow=new ArrayList();
         mapimage = new BufferedImage(MAPWIDTH,MAPHEIGHT,BufferedImage.TYPE_INT_RGB);
@@ -134,8 +129,6 @@ public class Map extends JPanel {
                 }
             }
             //endregion
-
-
         }
     }
     private void AddIcons(){
@@ -190,14 +183,19 @@ public class Map extends JPanel {
         g.drawImage(mapimage, 0, 0, this);
     }
     private static long stringToSeed(String s) {
-        if (s == null) {
-            return 0;
+        try{
+            return Long.valueOf(s);
+        }catch(Exception e){
+            if (s == null) {
+                return 0;
+            }
+            long hash = 0;
+            for (char c : s.toCharArray()) {
+                hash = 31L*hash + c;
+            }
+            return hash;
         }
-        long hash = 0;
-        for (char c : s.toCharArray()) {
-            hash = 31L*hash + c;
-        }
-        return hash;
+
     }
     private static BufferedImage resize(BufferedImage img, int height, int width) {
         Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
@@ -206,5 +204,111 @@ public class Map extends JPanel {
         g2d.drawImage(tmp, 0, 0, null);
         g2d.dispose();
         return resized;
+    }
+    public static float fixIconPercent(float f){
+        if(f<0){ return 0;
+        }else if (f>100) return 100;
+        else return f;
+    }
+    public Long getSeed() {
+        return seed;
+    }
+    public void setSeed(Long seed) {
+        this.seed = seed;
+        DoAllTheThings();
+    }
+    public void setSeed(String seed) {
+        this.seed = stringToSeed(seed);
+        DoAllTheThings();
+    }
+    public int getMAPHEIGHT() {
+        return MAPHEIGHT;
+    }
+    public void setMAPHEIGHT(String s) {
+        int n;
+        try{
+            n=Integer.parseInt(s);
+            n=(n-n%10);
+        }catch(Exception e){
+            n=600;
+        }
+        this.MAPHEIGHT= n;
+        this.PIXELSHIGH=n/10;
+        //DoAllTheThings();
+    }
+    public int getMAPWIDTH() {
+        return MAPWIDTH;
+    }
+    public void setMAPWIDTH(String s) {
+        int n;
+        try{
+            n=Integer.parseInt(s);
+            n=(n-n%10);
+        }catch(Exception e){
+            n=800;
+        }
+        this.MAPWIDTH = n;
+        this.PIXELSWIDE=n/10;
+        //DoAllTheThings();
+    }
+    public boolean getWIPEEFFECT() {
+        return WIPEEFFECT;
+    }
+    public void setWIPEEFFECT(boolean WIPEEFFECT) {
+        this.WIPEEFFECT = WIPEEFFECT;
+        //DoAllTheThings();
+    }
+    public int getICONPERCENT() {
+        return (int)ICONPERCENT;
+    }
+    public void setICONPERCENT(String s) {
+        float n;
+        try{
+             n= Float.parseFloat(s);
+            if(n>100){
+                n=100;
+            }else if(n<0){
+                n=0;
+            }
+        }catch(Exception e){
+            n=0;
+        }
+        this.ICONPERCENT = n;
+        //DoAllTheThings();
+    }
+    public int getITERATIONS() {
+        return ITERATIONS;
+    }
+    public void setITERATIONS(String s) {
+        int n;
+        try{
+            n=Integer.parseInt(s);
+        }catch(Exception e){
+            n=8;
+        }
+        this.ITERATIONS = n;
+        //DoAllTheThings();
+    }
+    public void Generate(String h, String w, boolean wipe,String it,String ic){
+        timer.stop();
+        this.setMAPHEIGHT(h);
+        this.setMAPWIDTH(w);
+        this.setWIPEEFFECT(wipe);
+        this.setITERATIONS(it);
+        this.setICONPERCENT(ic);
+        this.setSeed(String.valueOf(System.currentTimeMillis()));
+        setPreferredSize(new Dimension(getMAPWIDTH(),getMAPHEIGHT()));
+        DoAllTheThings();
+    }
+    public void Generate(String h, String w, boolean wipe,String it,String ic,String seed){
+        timer.stop();
+        this.setMAPHEIGHT(h);
+        this.setMAPWIDTH(w);
+        this.setWIPEEFFECT(wipe);
+        this.setITERATIONS(it);
+        this.setICONPERCENT(ic);
+        this.setSeed(seed);
+        setPreferredSize(new Dimension(getMAPWIDTH(),getMAPHEIGHT()));
+        DoAllTheThings();
     }
 }
