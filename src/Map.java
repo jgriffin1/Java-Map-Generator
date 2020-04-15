@@ -17,29 +17,25 @@ public class Map extends JPanel {
     BufferedImage mapimage;
     MapPoint array[][];
     Random random;
-
+    ArrayList allInARow;
 
     int MAPHEIGHT,MAPWIDTH;
-
+    int PIXELSHIGH,PIXELSWIDE;
     //JFrame mainFrame;
     //private
-    public Map(){
-        this(String.valueOf(System.currentTimeMillis()),6,false, 600,600,50);
+    public Map(int h, int w){
+        //this(String.valueOf(System.currentTimeMillis()),8,false, Toolkit.getDefaultToolkit().getScreenSize().height-100, Toolkit.getDefaultToolkit().getScreenSize().width-100,50);
+        this(String.valueOf(System.currentTimeMillis()),8,false, h, w,50);
     }
     public Map(String seed, int ITERATIONS,boolean WIPEEFFECT, int HEIGHT, int WIDTH, float ICONPERCENT){
-
         this.seed = stringToSeed(seed);
         this.ITERATIONS=ITERATIONS;
         this.WIPEEFFECT=WIPEEFFECT;
-        this.MAPHEIGHT=HEIGHT;
-        this.MAPWIDTH=WIDTH;
+        this.MAPHEIGHT=(HEIGHT-(HEIGHT%10));//make a multiple of 10
+        this.MAPWIDTH=(WIDTH-(WIDTH%10));
+        this.PIXELSHIGH=HEIGHT/10;
+        this.PIXELSWIDE=WIDTH/10;
         this.ICONPERCENT = fixIconPercent(ICONPERCENT);
-//        new Timer(200, new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                repaint();
-//            }
-//        }).start();
 
         setPreferredSize(new Dimension(WIDTH,HEIGHT));
         setLayout(new BorderLayout());
@@ -52,9 +48,33 @@ public class Map extends JPanel {
         }else if (f>100) return 100;
         else return f;
     }
+    int test1 = 0;
     public void DoAllTheThings(){
         BuildMap();
-        AddIcons();
+        if(WIPEEFFECT){
+            Timer timer = new Timer(10,null);
+            timer.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent e) {
+                    for(int i =0;i<PIXELSHIGH;i++){
+                        if(test1>=allInARow.size()){
+                            AddIcons();
+                            timer.stop();
+                            return;
+                        }
+                        AddMapPixel((MapPoint)allInARow.get(test1));
+                        test1+=1;
+                    }
+
+                }
+            });
+            timer.start();
+        }else{
+
+            for(int i =allInARow.size()-PIXELSHIGH*PIXELSWIDE;i<allInARow.size();i++){
+                AddMapPixel((MapPoint)allInARow.get(i));
+            }
+            AddIcons();
+        }
 
         //save the most recently created map to a file
         try {
@@ -64,25 +84,28 @@ public class Map extends JPanel {
 
         }
     }
+
     private void BuildMap(){
+        allInARow=new ArrayList();
         mapimage = new BufferedImage(MAPWIDTH,MAPHEIGHT,BufferedImage.TYPE_INT_RGB);
 
         random = new Random(seed);
-         array = new MapPoint[60][60];
+         array = new MapPoint[PIXELSWIDE][PIXELSHIGH];
 
         //region make everything random
         for(int x = 0; x<array.length;x++){
             for(int y=0;y<array[0].length;y++){
                 int low = -10;
                 int high = 10;
-                array[x][y]=new MapPoint(low + random.nextInt(high-low+1),x,y,random);
-                AddMapPixel(array[x][y]);
+                MapPoint mp = new MapPoint(low + random.nextInt(high-low+1),x,y,random);
+                allInARow.add(new MapPoint(mp));
+                array[x][y]=mp;
+                //AddMapPixel(array[x][y]);
 
             }
         }
         //endregion
         for(int z = 0; z<ITERATIONS;z++){
-
 
             //region not random
             ArrayList surroundingHeights = new ArrayList();
@@ -106,7 +129,8 @@ public class Map extends JPanel {
                         }
                     }
                     array[x][y].setHeight(surroundingHeights);
-                    AddMapPixel(array[x][y]);
+                    //AddMapPixel(array[x][y]);
+                    allInARow.add(new MapPoint(array[x][y]));
                 }
             }
             //endregion
@@ -130,7 +154,7 @@ public class Map extends JPanel {
                             int high2=4;
                             int randomNumber2 = low2 + random.nextInt(high2-low2+1);
                             g.drawImage((BufferedImage)ImageIO.read(new File(array[x][y].getIcon())), x*10+5+randomNumber2, y*10-20+randomNumber2, null);
-
+                            repaint();
                         }
 
                     }catch(Exception ex){
@@ -159,14 +183,8 @@ public class Map extends JPanel {
             }
         }
 
-//        if(WIPEEFFECT){
-//            try{
-//                Thread.sleep(1);
-//            }catch(Exception e){
-//            }
-//        }
+        repaint();
     }
-
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(mapimage, 0, 0, this);

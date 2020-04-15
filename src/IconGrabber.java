@@ -18,10 +18,14 @@ public class IconGrabber {
         int high = 0;
         int randomNumber;
         switch (i){
-            case Mountain:
+            case SmallMountain:
                 high = 4;
                 randomNumber = low + random.nextInt(high-low+1);
                 return "Icons/mountain"+randomNumber+".png";
+            case BigMountain:
+                high = 2;
+                randomNumber = low + random.nextInt(high-low+1);
+                return "Icons/mountainBig"+randomNumber+".png";
             case Palmtree:
                 //high = 1;
                 //randomNumber = low + random.nextInt(high-low+1);
@@ -58,6 +62,6 @@ public class IconGrabber {
 //        }
 //    }
     enum icon{
-        Mountain,Palmtree,Pinetree,Plaintree,WHALE,None,SirLuka,Compass;
+        BigMountain,SmallMountain,Palmtree,Pinetree,Plaintree,WHALE,None,SirLuka,Compass;
     }
 }

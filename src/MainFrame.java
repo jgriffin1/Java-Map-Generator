@@ -7,15 +7,20 @@ public class MainFrame extends  JFrame {
     private JButton btnQuit;
 
     final static int MAPHEIGHT = 600;
-    final static int MAPWIDTH = MAPHEIGHT; //keeping it a square for now
+    final static int MAPWIDTH = 800; //keeping it a square for now
     final static int SIDEBARSIZE=200;
     public MainFrame(){
         setTitle("Map");
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        add(new Map());
+        add(new Map(MAPHEIGHT,MAPWIDTH));
         //setSize(800,625);
         pack();
+        setSize(getWidth()+SIDEBARSIZE,getHeight());
+
+        //JPanel pnlButtons = new JPanel();
+        //txtSeed=new JTextField();
+
 
     }
 
