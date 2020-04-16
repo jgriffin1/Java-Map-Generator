@@ -297,6 +297,11 @@ public class Map extends JPanel {
         }catch(Exception e){
             n=8;
         }
+        if(n<0){
+            n=0;
+        }else if (n>50){
+            n=50;
+        }
         this.ITERATIONS = n;
         //DoAllTheThings();
     }
